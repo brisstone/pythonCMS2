@@ -1,3 +1,4 @@
+import os
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from sqlalchemy.orm import sessionmaker
@@ -180,6 +181,8 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 
 print("Starting server")
-httpd = HTTPServer(("127.0.0.1", 8000), RequestHandler)
-print("Hosting server on port 8000")
+port = int(os.environ.get("PORT", 5000))
+
+httpd = HTTPServer(("0.0.0.0", port), RequestHandler)
+print("Hosting server on port 5000")
 httpd.serve_forever()
