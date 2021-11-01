@@ -1,11 +1,13 @@
 import os
 import json
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer, SimpleHTTPRequestHandler
 from sqlalchemy.orm import sessionmaker
 from json import dumps
 import mysql.connector
 from sqlalchemy import create_engine, MetaData,Table,Column,Integer,Boolean,String,TEXT,FLOAT
 from sqlalchemy.orm import declarative_base,sessionmaker
+import cgi
+
 
 mydb = mysql.connector.connect(host='sql5.freesqldatabase.com',user='sql5447520',password='nwy2VMhGQW',database='sql5447520')
 
@@ -44,13 +46,14 @@ myc = mydb.cursor(buffered=True)
 
 
 """ The HTTP request handler """
-class RequestHandler(BaseHTTPRequestHandler):
+class RequestHandler(SimpleHTTPRequestHandler):
 
   def _send_cors_headers(self):
       """ Sets headers required for CORS """
       self.send_header("Access-Control-Allow-Origin", "*")
       self.send_header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
       self.send_header("Access-Control-Allow-Headers", "x-api-key,Content-Type")
+      self.send_header("Cache-Control", "no store, no-cache, must-revalidate")
 
   def send_dict_response(self, d):
       """ Sends a dictionary (JSON) back to the client """
@@ -77,6 +80,7 @@ class RequestHandler(BaseHTTPRequestHandler):
           self._send_cors_headers()
           self.send_header("Content-Type", "application/json")
           self.end_headers()
+
 
           dataLength = int(self.headers["Content-Length"])
           data = self.rfile.read(dataLength)
