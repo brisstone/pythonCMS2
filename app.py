@@ -7,6 +7,7 @@ import mysql.connector
 from sqlalchemy import create_engine, MetaData,Table,Column,Integer,Boolean,String,TEXT,FLOAT
 from sqlalchemy.orm import declarative_base,sessionmaker
 import cgi
+import SocketServer
 
 
 mydb = mysql.connector.connect(host='sql5.freesqldatabase.com',user='sql5447520',password='nwy2VMhGQW',database='sql5447520')
@@ -46,7 +47,7 @@ myc = mydb.cursor(buffered=True)
 
 
 """ The HTTP request handler """
-class RequestHandler(SimpleHTTPRequestHandler):
+class RequestHandler(BaseHTTPRequestHandler):
 
   def _send_cors_headers(self):
       """ Sets headers required for CORS """
@@ -77,8 +78,8 @@ class RequestHandler(SimpleHTTPRequestHandler):
   def do_POST(self):
       if self.path.endswith('/login'):
           self.send_response(200)
-          self._send_cors_headers()
           self.send_header("Content-Type", "application/json")
+          self._send_cors_headers()
           self.end_headers()
 
 
