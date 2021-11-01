@@ -46,7 +46,7 @@ myc = mydb.cursor(buffered=True)
 
 
 """ The HTTP request handler """
-class RequestHandler(SimpleHTTPRequestHandler):
+class RequestHandler(BaseHTTPRequestHandler):
 
   def _send_cors_headers(self):
       """ Sets headers required for CORS """
