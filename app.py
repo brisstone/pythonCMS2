@@ -50,24 +50,23 @@ class RequestHandler(BaseHTTPRequestHandler):
 
   def _send_cors_headers(self):
       """ Sets headers required for CORS """
+      self.send_response(200)
+      self.send_header("Content-Type", "application/json")
       self.send_header("Access-Control-Allow-Origin", "*")
       self.send_header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
       self.send_header("Access-Control-Allow-Headers", "x-api-key,Content-Type")
       self.send_header("Cache-Control", "no store, no-cache, must-revalidate")
+      self.end_headers()
 
   def send_dict_response(self, d):
       """ Sends a dictionary (JSON) back to the client """
       self.wfile.write(bytes(dumps(d), "utf8"))
 
   def do_OPTIONS(self):
-      self.send_response(200)
       self._send_cors_headers()
-      self.end_headers()
 
   def do_GET(self):
-      self.send_response(200)
       self._send_cors_headers()
-      self.end_headers()
 
 
       response = {}
@@ -76,10 +75,9 @@ class RequestHandler(BaseHTTPRequestHandler):
 
   def do_POST(self):
       if self.path.endswith('/login'):
-          self.send_response(200)
           self._send_cors_headers()
-          self.send_header("Content-Type", "application/json")
-          self.end_headers()
+
+
 
 
           dataLength = int(self.headers["Content-Length"])
@@ -147,10 +145,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 
       if self.path.endswith('/register'):
-          self.send_response(200)
           self._send_cors_headers()
-          self.send_header("Content-Type", "application/json")
-          self.end_headers()
 
           dataLength = int(self.headers["Content-Length"])
           data = self.rfile.read(dataLength)
