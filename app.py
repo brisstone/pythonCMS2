@@ -74,6 +74,7 @@ class RequestHandler(BaseHTTPRequestHandler):
       self.send_dict_response(response)
 
   def do_POST(self):
+      self._send_cors_headers()
       if self.path.endswith('/login'):
           self._send_cors_headers()
 
