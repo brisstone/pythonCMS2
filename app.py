@@ -51,7 +51,7 @@ class RequestHandler(BaseHTTPRequestHandler):
   def _send_cors_headers(self):
       """ Sets headers required for CORS """
       self.send_response(200)
-      self.send_header("Content-Type", "application/json", "text/html")
+      self.send_header("Content-Type", "application/json")
       self.send_header("Access-Control-Allow-Origin", "*")
       self.send_header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
       self.send_header("Access-Control-Allow-Headers", "x-api-key,Content-Type")
