@@ -1,15 +1,11 @@
 import os
 import json
-from http.server import BaseHTTPRequestHandler, HTTPServer, SimpleHTTPRequestHandler, test
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from sqlalchemy.orm import sessionmaker
 from json import dumps
 import mysql.connector
 from sqlalchemy import create_engine, MetaData,Table,Column,Integer,Boolean,String,TEXT,FLOAT
 from sqlalchemy.orm import declarative_base,sessionmaker
-import cgi
-import sys
-
-
 
 mydb = mysql.connector.connect(host='sql5.freesqldatabase.com',user='sql5447520',password='nwy2VMhGQW',database='sql5447520')
 
@@ -52,23 +48,23 @@ class RequestHandler(BaseHTTPRequestHandler):
 
   def _send_cors_headers(self):
       """ Sets headers required for CORS """
-      self.send_response(200)
-      self.send_header("Content-Type", "application/json")
-      self.send_header('Access-Control-Allow-Origin', '*')
+      self.send_header("Access-Control-Allow-Origin", "*")
       self.send_header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
       self.send_header("Access-Control-Allow-Headers", "x-api-key,Content-Type")
-      self.send_header("Cache-Control", "no store, no-cache, must-revalidate")
-      self.end_headers()
 
   def send_dict_response(self, d):
       """ Sends a dictionary (JSON) back to the client """
       self.wfile.write(bytes(dumps(d), "utf8"))
 
   def do_OPTIONS(self):
+      self.send_response(200)
       self._send_cors_headers()
+      self.end_headers()
 
   def do_GET(self):
+      self.send_response(200)
       self._send_cors_headers()
+      self.end_headers()
 
 
       response = {}
@@ -76,13 +72,11 @@ class RequestHandler(BaseHTTPRequestHandler):
       self.send_dict_response(response)
 
   def do_POST(self):
-      self.send_header('Access-Control-Allow-Origin', '*')
-      super(RequestHandler, self).end_headers(self)
       if self.path.endswith('/login'):
+          self.send_response(200)
           self._send_cors_headers()
-
-
-
+          self.send_header("Content-Type", "application/json")
+          self.end_headers()
 
           dataLength = int(self.headers["Content-Length"])
           data = self.rfile.read(dataLength)
@@ -149,7 +143,10 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 
       if self.path.endswith('/register'):
+          self.send_response(200)
           self._send_cors_headers()
+          self.send_header("Content-Type", "application/json")
+          self.end_headers()
 
           dataLength = int(self.headers["Content-Length"])
           data = self.rfile.read(dataLength)
@@ -182,9 +179,6 @@ class RequestHandler(BaseHTTPRequestHandler):
 
           #self.send_dict_response(response)
 
-# if __name__ == '__main__':
-#     test(RequestHandler, HTTPServer, port=int(sys.argv[1]) if len(sys.argv) > 1 else 9000)
-
 
 print("Starting server")
 port = int(os.environ.get("PORT", 5000))
@@ -192,4 +186,3 @@ port = int(os.environ.get("PORT", 5000))
 httpd = HTTPServer(("0.0.0.0", port), RequestHandler)
 print("Hosting server on port 5000")
 httpd.serve_forever()
-
