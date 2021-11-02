@@ -184,11 +184,11 @@ class RequestHandler(BaseHTTPRequestHandler):
 if __name__ == '__main__':
     test(RequestHandler, HTTPServer, port=int(sys.argv[1]) if len(sys.argv) > 1 else 9000)
 
-
-print("Starting server")
-port = int(os.environ.get("PORT", 5000))
-
-httpd = HTTPServer(("0.0.0.0", port), RequestHandler)
-print("Hosting server on port 5000")
-httpd.serve_forever()
-
+#
+# print("Starting server")
+# port = int(os.environ.get("PORT", 5000))
+#
+# httpd = HTTPServer(("0.0.0.0", port), RequestHandler)
+# print("Hosting server on port 5000")
+# httpd.serve_forever()
+#
