@@ -7,6 +7,8 @@ import mysql.connector
 from sqlalchemy import create_engine, MetaData,Table,Column,Integer,Boolean,String,TEXT,FLOAT
 from sqlalchemy.orm import declarative_base,sessionmaker
 import cgi
+import sys
+
 
 
 mydb = mysql.connector.connect(host='sql5.freesqldatabase.com',user='sql5447520',password='nwy2VMhGQW',database='sql5447520')
@@ -180,7 +182,7 @@ class RequestHandler(BaseHTTPRequestHandler):
           #self.send_dict_response(response)
 
 if __name__ == '__main__':
-    test(RequestHandler, HTTPServer)
+    test(RequestHandler, HTTPServer, port=int(sys.argv[1]) if len(sys.argv) > 1 else 9000)
 
 
 print("Starting server")
