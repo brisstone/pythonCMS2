@@ -77,6 +77,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
   def do_POST(self):
       self.send_header('Access-Control-Allow-Origin', '*')
+      super(RequestHandler, self).end_headers(self)
       if self.path.endswith('/login'):
           self._send_cors_headers()
 
