@@ -52,7 +52,7 @@ class RequestHandler(BaseHTTPRequestHandler):
       """ Sets headers required for CORS """
       self.send_response(200)
       self.send_header("Content-Type", "application/json")
-      self.send_header("Access-Control-Allow-Origin", "*")
+      self.send_header('Access-Control-Allow-Origin', '*')
       self.send_header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
       self.send_header("Access-Control-Allow-Headers", "x-api-key,Content-Type")
       self.send_header("Cache-Control", "no store, no-cache, must-revalidate")
@@ -74,7 +74,7 @@ class RequestHandler(BaseHTTPRequestHandler):
       self.send_dict_response(response)
 
   def do_POST(self):
-      self._send_cors_headers()
+      self.send_header('Access-Control-Allow-Origin', '*')
       if self.path.endswith('/login'):
           self._send_cors_headers()
 
