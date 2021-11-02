@@ -72,11 +72,15 @@ class RequestHandler(BaseHTTPRequestHandler):
       self.send_dict_response(response)
 
   def do_POST(self):
+      self._send_cors_headers()
+      self.end_headers()
       if self.path.endswith('/login'):
           self.send_response(200)
           self._send_cors_headers()
           self.send_header("Content-Type", "application/json")
           self.end_headers()
+
+
 
           dataLength = int(self.headers["Content-Length"])
           data = self.rfile.read(dataLength)
