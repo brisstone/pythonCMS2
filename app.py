@@ -180,7 +180,7 @@ class RequestHandler(BaseHTTPRequestHandler):
           #self.send_dict_response(response)
 
 
-print("Starting server")
+print("Starting server now")
 port = int(os.environ.get("PORT", 5000))
 
 httpd = HTTPServer(("0.0.0.0", port), RequestHandler)
