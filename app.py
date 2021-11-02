@@ -1,6 +1,6 @@
 import os
 import json
-from http.server import BaseHTTPRequestHandler, HTTPServer, SimpleHTTPRequestHandler
+from http.server import BaseHTTPRequestHandler, HTTPServer, SimpleHTTPRequestHandler, test
 from sqlalchemy.orm import sessionmaker
 from json import dumps
 import mysql.connector
@@ -178,6 +178,9 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 
           #self.send_dict_response(response)
+
+if __name__ == '__main__':
+    test(RequestHandler, HTTPServer)
 
 
 print("Starting server")
