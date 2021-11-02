@@ -183,6 +183,8 @@ class RequestHandler(BaseHTTPRequestHandler):
 
           #self.send_dict_response(response)
 
+# if __name__ == '__main__':
+#     test(RequestHandler, HTTPServer, port=int(sys.argv[1]) if len(sys.argv) > 1 else 9000)
 
 print("Starting server now")
 port = int(os.environ.get("PORT", 5000))
