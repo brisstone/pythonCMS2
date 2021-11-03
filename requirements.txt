@@ -30,3 +30,5 @@ SQLAlchemy==1.4.26
 urllib3==1.26.7
 Werkzeug==2.0.2
 yarg==0.1.9
+python-dotenv 
+python-dotenv 

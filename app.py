@@ -6,8 +6,19 @@ from json import dumps
 import mysql.connector
 from sqlalchemy import create_engine, MetaData,Table,Column,Integer,Boolean,String,TEXT,FLOAT
 from sqlalchemy.orm import declarative_base,sessionmaker
+from dotenv import load_dotenv
+import dotenv
+project_folder = os.path.expanduser('~/cms2-main')  # adjust as appropriate
+load_dotenv(os.path.join(project_folder, '.env'))
+load_dotenv(dotenv.find_dotenv())
 
-mydb = mysql.connector.connect(host='sql5.freesqldatabase.com',user='sql5447520',password='nwy2VMhGQW',database='sql5447520')
+HOST = os.getenv("HOST")
+USER = os.getenv("USER")
+print(USER)
+PASSWORD = os.getenv("PASSWORD")
+DATABASE = os.getenv("DATABASE")
+
+mydb = mysql.connector.connect(host=HOST,user= USER,password=PASSWORD,database=DATABASE)
 
 engine = create_engine("mysql+pymysql://sql5447520:nwy2VMhGQW@sql5.freesqldatabase.com/sql5447520")
 
