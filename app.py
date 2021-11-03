@@ -14,13 +14,14 @@ load_dotenv(dotenv.find_dotenv())
 
 HOST = os.getenv("HOST")
 USER = os.getenv("USER")
-print(USER)
+
 PASSWORD = os.getenv("PASSWORD")
 DATABASE = os.getenv("DATABASE")
+print(PASSWORD)
 
 mydb = mysql.connector.connect(host=HOST,user= USER,password=PASSWORD,database=DATABASE)
 
-engine = create_engine("mysql+pymysql://sql5447520:nwy2VMhGQW@sql5.freesqldatabase.com/sql5447520")
+engine = create_engine("mysql+pymysql://"+USER+":nwy2VMhGQW@sql5.freesqldatabase.com/" + USER)
 
 engine.connect()
 
