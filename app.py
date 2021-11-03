@@ -14,7 +14,6 @@ load_dotenv(dotenv.find_dotenv())
 
 HOST = os.getenv("HOST")
 USER = os.getenv("USER")
-
 PASSWORD = os.getenv("PASSWORD")
 DATABASE = os.getenv("DATABASE")
 print(PASSWORD)
@@ -112,17 +111,19 @@ class RequestHandler(BaseHTTPRequestHandler):
           myc.execute("SELECT * FROM users WHERE Email= %(unm)s", {'unm': a})
 
           for j in myc:
+
               print(j)
 
 
           mydb.commit()
 
-          myc.execute("SELECT * FROM users WHERE Email= %(unm)s", {'unm': a})
-
+          check = myc.execute("SELECT * FROM users WHERE Email= %(unm)s", {'unm': a})
+          print(check)
           for i in myc:
               print(i)
+
               if i[2] == b:
-                  k="Password correct OK"
+                  k = "Password correct OK"
                   response = {}
                   response["status"] = f"{i[3]},{j},{k}"
 
@@ -133,20 +134,40 @@ class RequestHandler(BaseHTTPRequestHandler):
                   res3 = {}
                   res3["Info"] = f"{j}"
 
-                  el = [res1,res2,res3]
+                  el = [res1, res2, res3]
 
                   self.wfile.write(bytes(dumps(el), "utf8"))
 
+                  check = True
 
-
-                  #self.send_dict_response(response)
+                  # self.send_dict_response(response)
 
               else:
-                  k ="Incorrect Password"
+                  k = "Incorrect Password"
                   response = {}
                   response["status"] = f"{k}"
 
-                  self.send_dict_response(response)
+                  res4 = {}
+                  res4["IncorrectPassword"] = f"{k}"
+
+                  el2 = [res4]
+                  self.wfile.write(bytes(dumps(el2), "utf8"))
+                  check = True
+
+          if not check:
+              l = "Email Does not exist"
+              response = {}
+              response["status"] = f"{l}"
+
+              res5 = {}
+              res5["NoUserFound"] = f"{l}"
+
+              el3 = [res5]
+              self.wfile.write(bytes(dumps(el3), "utf8"))
+              # self.send_dict_response(response)
+
+
+
 
           mydb.commit()
 
