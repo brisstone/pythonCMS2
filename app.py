@@ -20,7 +20,7 @@ print(PASSWORD)
 
 mydb = mysql.connector.connect(host=HOST,user= USER,password=PASSWORD,database=DATABASE)
 
-engine = create_engine("mysql+pymysql://"+USER+":"+PASSWORD+"@sql5.freesqldatabase.com/" + USER)
+engine = create_engine("mysql+pymysql://"+USER+":"+PASSWORD+"@sql5.freemysqlhosting.net/" + USER)
 
 engine.connect()
 
