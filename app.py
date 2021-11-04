@@ -8,7 +8,7 @@ from sqlalchemy import create_engine, MetaData,Table,Column,Integer,Boolean,Stri
 from sqlalchemy.orm import declarative_base,sessionmaker
 from dotenv import load_dotenv
 import dotenv
-project_folder = os.path.expanduser('~/cms2-main')  # adjust as appropriate
+project_folder = os.path.expanduser('~/cms2-main')
 load_dotenv(os.path.join(project_folder, '.env'))
 load_dotenv(dotenv.find_dotenv())
 
