@@ -215,13 +215,13 @@ class RequestHandler(BaseHTTPRequestHandler):
           response = y
           if "email" in y:
               a = y["email"]
-              b = y["password"]
+              # b = y["password"]
               c = y["Adm"]
               d = y["FullName"]
               e = y["DateOfBirth"]
               z = y["Picture"]
               # print('me',y.myFile)
-              print('gggg',)
+
               w = z["myFile"]
 
               # print('yoooou',f.get("myFile"))
@@ -239,14 +239,14 @@ class RequestHandler(BaseHTTPRequestHandler):
               n = ','.join(y["Courses"])
               o = y['Degree']
               print(a)
-              print(b)
+              # print(b)
               print(j)
 
               # check = myc.execute("SELECT Email FROM users WHERE EMAIL= %(unm)s", {'unm':a})
 
               # new_user = users(email=a, password=b)
 
-              ins = users.insert().values(Email=a, Password=b,Adm=bool(c), FullName=d,DateOfBirth=e, Picture=f,SchoolStartYear=g,MajorFieldOfStudy=h,MinorFieldOfStudy=i,AdCourses=j,Average=k,Comments=l,Remark=m, Courses= n, Degree = o)
+              ins = users.insert().values(Email=a,Adm=bool(c), FullName=d,DateOfBirth=e, Picture=f,SchoolStartYear=g,MajorFieldOfStudy=h,MinorFieldOfStudy=i,AdCourses=j,Average=k,Comments=l,Remark=m, Courses= n, Degree = o)
               conn = engine.connect()
               conn.execute(ins)
               response = {}
