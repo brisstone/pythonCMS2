@@ -11,6 +11,11 @@ import dotenv
 project_folder = os.path.expanduser('~/cms2-main')
 load_dotenv(os.path.join(project_folder, '.env'))
 load_dotenv(dotenv.find_dotenv())
+import base64
+from PIL import Image
+from io import BytesIO
+from base64 import b64decode
+
 
 HOST = os.getenv("HOST")
 USER = os.getenv("USER")
@@ -44,6 +49,7 @@ users = Table(
     Column('Comments', TEXT),
     Column('Suspended', Boolean, default=0),
     Column('Remark', TEXT),
+    Column("Degree", TEXT),
 )
 #meta.create_all(engine)
 print(engine)
@@ -51,7 +57,7 @@ print(engine)
 Session=sessionmaker()
 myc = mydb.cursor(buffered=True)
 #DO NOT RUN THIS LINE AGAIN THE DATABASE HAS BEEN CREATED EXCEPT YOU WANT TO CREATE ONE ON A NEW SERVER
-# myc.execute('CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, Email VARCHAR(66) UNIQUE, Password VARCHAR(20), Adm INT(1) DEFAULT 0, FullName VARCHAR(200), DateOfBirth VARCHAR(20), Picture VARCHAR(10), SchoolStartYear VARCHAR(50), MajorFieldOfStudy VARCHAR(100),MinorFieldOfStudy VARCHAR(100), Courses TEXT, AdCourses TEXT, Average FLOAT(8) , Comments TEXT, Suspended INT(1) DEFAULT 0, Remark TEXT)')
+#myc.execute('CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, Email VARCHAR(66) UNIQUE, Password VARCHAR(20), Adm INT(1) DEFAULT 0, FullName VARCHAR(200), DateOfBirth VARCHAR(20), Picture VARCHAR(10), SchoolStartYear VARCHAR(50), MajorFieldOfStudy VARCHAR(100),MinorFieldOfStudy VARCHAR(100), Courses TEXT, AdCourses TEXT, Average FLOAT(8) , Comments TEXT, Suspended INT(1) DEFAULT 0, Remark TEXT)')
 
 
 """ The HTTP request handler """
@@ -83,14 +89,11 @@ class RequestHandler(BaseHTTPRequestHandler):
       self.send_dict_response(response)
 
   def do_POST(self):
-
       if self.path.endswith('/login'):
           self.send_response(200)
           self._send_cors_headers()
           self.send_header("Content-Type", "application/json")
           self.end_headers()
-
-
 
           dataLength = int(self.headers["Content-Length"])
           data = self.rfile.read(dataLength)
@@ -106,14 +109,10 @@ class RequestHandler(BaseHTTPRequestHandler):
               print(a)
               print(b)
 
-
-
           myc.execute("SELECT * FROM users WHERE Email= %(unm)s", {'unm': a})
 
           for j in myc:
-
               print(j)
-
 
           mydb.commit()
 
@@ -166,17 +165,7 @@ class RequestHandler(BaseHTTPRequestHandler):
               self.wfile.write(bytes(dumps(el3), "utf8"))
               # self.send_dict_response(response)
 
-
-
-
           mydb.commit()
-
-
-
-
-
-
-
 
       if self.path.endswith('/register'):
           self.send_response(200)
@@ -196,31 +185,81 @@ class RequestHandler(BaseHTTPRequestHandler):
           if "email" in y:
               a = y["email"]
               b = y["password"]
+
               print(a)
               print(b)
 
-              #check = myc.execute("SELECT Email FROM users WHERE EMAIL= %(unm)s", {'unm':a})
-
-
-
-
+              # check = myc.execute("SELECT Email FROM users WHERE EMAIL= %(unm)s", {'unm':a})
 
               # new_user = users(email=a, password=b)
 
-              ins = users.insert().values(Email=a, Password=b,FullName="")
+              ins = users.insert().values(Email=a, Password=b, FullName="")
               conn = engine.connect()
               conn.execute(ins)
               self.send_dict_response(response)
 
+      if self.path.endswith('/admregister'):
+          self.send_response(200)
+          self._send_cors_headers()
+          self.send_header("Content-Type", "application/json")
+          self.end_headers()
 
-          #self.send_dict_response(response)
+          dataLength = int(self.headers["Content-Length"])
+          data = self.rfile.read(dataLength)
+
+          data.strip()
+
+          print(data)
+          # convert from json
+          y = json.loads(data)
+          response = y
+          if "email" in y:
+              a = y["email"]
+              b = y["password"]
+              c = y["Adm"]
+              d = y["FullName"]
+              e = y["DateOfBirth"]
+              z = y["Picture"]
+              # print('me',y.myFile)
+              print('gggg',)
+              w = z["myFile"]
+
+              # print('yoooou',f.get("myFile"))
+              # f = Image.open(BytesIO(b64decode(w.split(',')[1])))
+              # f.save("image.png")
+              # FA = w.split(',')[1]));
+              f= w.split(',')[1]
+              g = y["SchoolStartYear"]
+              h = y["MajorFieldOfStudy"]
+              i = y["MinorFieldOfStudy"]
+              j = ','.join(y["AdCourses"])
+              k = y["Average"]
+              l = y["Comments"]
+              m = y["Remark"]
+              n = ','.join(y["Courses"])
+              o = y['Degree']
+              print(a)
+              print(b)
+              print(j)
+
+              # check = myc.execute("SELECT Email FROM users WHERE EMAIL= %(unm)s", {'unm':a})
+
+              # new_user = users(email=a, password=b)
+
+              ins = users.insert().values(Email=a, Password=b,Adm=bool(c), FullName=d,DateOfBirth=e, Picture=f,SchoolStartYear=g,MajorFieldOfStudy=h,MinorFieldOfStudy=i,AdCourses=j,Average=k,Comments=l,Remark=m, Courses= n, Degree = o)
+              conn = engine.connect()
+              conn.execute(ins)
+              response = {}
+              response = "SUCCESS"
+              self.send_dict_response(response)
+      #self.send_dict_response(response)
 
 # if __name__ == '__main__':
 #     test(RequestHandler, HTTPServer, port=int(sys.argv[1]) if len(sys.argv) > 1 else 9000)
 
 print("Starting server now")
-port = int(os.environ.get("PORT", 5000))
+port = int(os.environ.get("PORT", 8000))
 
 httpd = HTTPServer(("0.0.0.0", port), RequestHandler)
-print("Hosting server on port 5000")
+print("Hosting server on port 8000")
 httpd.serve_forever()
