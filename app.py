@@ -328,7 +328,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 # if __name__ == '__main__':
 #     test(RequestHandler, HTTPServer, port=int(sys.argv[1]) if len(sys.argv) > 1 else 9000)
 
-print("Starting server now")
+print("Starting servetr now")
 port = int(os.environ.get("PORT", 8000))
 
 httpd = HTTPServer(("0.0.0.0", port), RequestHandler)
