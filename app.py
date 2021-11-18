@@ -16,6 +16,20 @@ from PIL import Image
 from io import BytesIO
 from base64 import b64decode
 
+from cryptography.fernet import Fernet
+
+key = Fernet.generate_key()
+
+# Instance the Fernet class with the key
+fernet = Fernet(key)
+
+
+# import pycryptodome
+# from Crypto.Cipher import AES
+# from Crypto import Random
+
+
+
 
 HOST = os.getenv("HOST")
 USER = os.getenv("USER")
@@ -57,7 +71,7 @@ print(engine)
 Session=sessionmaker()
 myc = mydb.cursor(buffered=True)
 #DO NOT RUN THIS LINE AGAIN THE DATABASE HAS BEEN CREATED EXCEPT YOU WANT TO CREATE ONE ON A NEW SERVER
-#myc.execute('CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, Email VARCHAR(66) UNIQUE, Password VARCHAR(20), Adm INT(1) DEFAULT 0, FullName VARCHAR(200), DateOfBirth VARCHAR(20), Picture VARCHAR(10), SchoolStartYear VARCHAR(50), MajorFieldOfStudy VARCHAR(100),MinorFieldOfStudy VARCHAR(100), Courses TEXT, AdCourses TEXT, Average FLOAT(8) , Comments TEXT, Suspended INT(1) DEFAULT 0, Remark TEXT)')
+# myc.execute('CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, Email VARCHAR(66) UNIQUE, Password VARCHAR(20), Adm INT(1) DEFAULT 0, FullName VARCHAR(200), DateOfBirth VARCHAR(20), Picture VARCHAR(10), SchoolStartYear VARCHAR(50), MajorFieldOfStudy VARCHAR(100),MinorFieldOfStudy VARCHAR(100), Courses TEXT, AdCourses TEXT, Average FLOAT(8) , Comments TEXT, Suspended INT(1) DEFAULT 0, Remark TEXT)')
 
 
 """ The HTTP request handler """
@@ -112,7 +126,7 @@ class RequestHandler(BaseHTTPRequestHandler):
           myc.execute("SELECT * FROM users WHERE Email= %(unm)s", {'unm': a})
 
           for j in myc:
-              print(j)
+              print("ffffffff",j)
 
           mydb.commit()
 
@@ -215,43 +229,100 @@ class RequestHandler(BaseHTTPRequestHandler):
           response = y
           if "email" in y:
               a = y["email"]
-              # b = y["password"]
+              b = y["Password"]
               c = y["Adm"]
               d = y["FullName"]
               e = y["DateOfBirth"]
-              z = y["Picture"]
+              # z = y["Picture"]
               # print('me',y.myFile)
 
-              w = z["myFile"]
+              # w = z["myFile"]
+              # f = w.split(',')[1]
 
               # print('yoooou',f.get("myFile"))
               # f = Image.open(BytesIO(b64decode(w.split(',')[1])))
               # f.save("image.png")
               # FA = w.split(',')[1]));
-              f= w.split(',')[1]
+
               g = y["SchoolStartYear"]
               h = y["MajorFieldOfStudy"]
               i = y["MinorFieldOfStudy"]
               j = ','.join(y["AdCourses"])
-              k = y["Average"]
-              l = y["Comments"]
-              m = y["Remark"]
+              # k = y["Average"]
+              # l = y["Comments"]
+              # m = y["Remark"]
               n = ','.join(y["Courses"])
-              o = y['Degree']
+              # o = y['Degree']
               print(a)
               # print(b)
               print(j)
+
+              # raw = pad(b)
+              # key = "hello"
+              # iv = Random.new().read(AES.block_size)
+              # cipher = AES.new(key, AES.MODE_CBC, iv)
+              # return base64.b64encode(iv + cipher.encrypt(raw))
+
+              # b = fernet.decrypt(b).decode()
+
+
+
+
 
               # check = myc.execute("SELECT Email FROM users WHERE EMAIL= %(unm)s", {'unm':a})
 
               # new_user = users(email=a, password=b)
 
-              ins = users.insert().values(Email=a,Adm=bool(c), FullName=d,DateOfBirth=e, Picture=f,SchoolStartYear=g,MajorFieldOfStudy=h,MinorFieldOfStudy=i,AdCourses=j,Average=k,Comments=l,Remark=m, Courses= n, Degree = o)
-              conn = engine.connect()
-              conn.execute(ins)
-              response = {}
-              response = "SUCCESS"
-              self.send_dict_response(response)
+              check = myc.execute("SELECT * FROM users WHERE Email= %(unm)s", {'unm': a})
+              print(check)
+              for i in myc:
+                  print(i)
+                  print('aaaaaa')
+
+                  if i[1] == a:
+                      print('kill')
+                      kp = "Email Already Exists"
+                      response = {}
+                      response["status"] = f"{kp}"
+
+                      res6 = {}
+                      res6["EmailAlreadyExist"] = f"{kp}"
+
+                      el6 = [res6]
+                      self.wfile.write(bytes(dumps(el6), "utf8"))
+
+                  else:
+                      print('lokd')
+                      kpp = "sthwrong"
+                      response["sthwrong"] = f"{kpp}"
+
+
+              mydb.commit()
+
+          print('junjfjdd')
+          ins = users.insert().values(Email=a, Password=b, Adm=bool(c), FullName=d, DateOfBirth=e,
+                                      SchoolStartYear=g, MajorFieldOfStudy=h, MinorFieldOfStudy=i,
+                                      AdCourses=j, Courses=n)
+          conn = engine.connect()
+          conn.execute(ins)
+
+          pp = "SUCCESS"
+          response = {}
+          response["status"] = f"{pp}"
+
+          res7 = {}
+          res7["SUCCESS"] = f"{pp}"
+
+          el7 = [res7]
+          self.wfile.write(bytes(dumps(el7), "utf8"))
+
+
+
+
+
+
+
+
       #self.send_dict_response(response)
 
 # if __name__ == '__main__':
