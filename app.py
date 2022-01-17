@@ -358,7 +358,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
           ob = ["id", "Email", "Password", "Adm", "FullName", "DateOfBirth", "Picture", "SchoolStartYear",
                 "MajorFieldOfStudy", "MinorFieldOfStudy", "Courses", "AdCourses", "Average", "Comments",
-                "Suspended", "Remark"]
+                "Suspended", "Remark", "Degree"]
           counter = 0
           fndcount = []
 
@@ -367,7 +367,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
               t = str(a)
 
-              query = "SELECT * FROM users WHERE FullName LIKE %s"
+              query = "SELECT * FROM users WHERE Email LIKE %s"
               name = ("%" + t + "%",)
               # name = ("%W%",)
               myc.execute(query, name)
@@ -390,7 +390,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                   counter = 0
 
                   response = {}
-                  response["userinfo"] = f"{fndcount}"
+                  response["userinfo"] = eval(f"{fndcount}")
           self.wfile.write(bytes(dumps(response), "utf8"))
 
       # UPDATING THE STUDENT PROFILE REQUIRES THE Email OF THE ADMIN THATS UPDATING THE STATUS AS(admemail) THEN ALL THE STUDENT INFO
@@ -416,16 +416,17 @@ class RequestHandler(BaseHTTPRequestHandler):
               a = y["email"]
               d = y["FullName"]
               e = y["DateOfBirth"]
-              f = y["Picture"]
-              g = y["SchoolStartYear"]
+              # f = y["Picture"]
+              # g = y["SchoolStartYear"]
               h = y["MajorFieldOfStudy"]
               i = y["MinorFieldOfStudy"]
               j = ','.join(y["AdCourses"])
-              k = y["Average"]
-              l = y["Comments"]
-              m = y["Remark"]
+              # k = y["Average"]
+              # l = y["Comments"]
+              # m = y["Remark"]
               n = y["id"]
               o = ','.join(y["Courses"])
+              p = y["Degree"]
 
               tid = int(n)
 
@@ -438,8 +439,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                   if rr == 1:
                       print('Admin stats true')
                       myc.execute(
-                          'UPDATE users SET Email = %s ,FullName = %s ,DateOfBirth = %s ,Picture = %s ,SchoolStartYear = %s ,MajorFieldOfStudy = %s ,MinorFieldOfStudy = %s,Courses=%s ,AdCourses = %s ,Average = %s ,Comments = %s ,Remark = %s WHERE id = %s ',
-                          (a, d, e, f, g, h, i, o, j, k, l, m, tid))
+                          'UPDATE users SET Email = %s ,FullName = %s ,DateOfBirth = %s ,MajorFieldOfStudy = %s ,MinorFieldOfStudy = %s,Courses=%s ,AdCourses = %s, Degree = %s WHERE id = %s ',
+                          (a, d, e, h, i, o, j, p tid))
                       mydb.commit()
                   else:
                       print("Admin stats false")
@@ -600,7 +601,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                           counter = 0
 
                           resp = {}
-                          resp["userinfo"] = f"{fndcount}"
+                          resp["userinfo"] = eval(f"{fndcount}")
                       self.wfile.write(bytes(dumps(resp), "utf8"))
                   else:
                       print("Admin stats false")
@@ -651,7 +652,7 @@ class RequestHandler(BaseHTTPRequestHandler):
               counter = 0
 
               response = {}
-              response["userinfo"] = f"{fndcount}"
+              response["userinfo"] = eval(f"{fndcount}")
           self.wfile.write(bytes(dumps(response), "utf8"))
 
 
