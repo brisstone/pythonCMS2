@@ -574,7 +574,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                       ob = ["id", "Email", "Password", "Adm", "FullName", "DateOfBirth", "Picture",
                             "SchoolStartYear",
                             "MajorFieldOfStudy", "MinorFieldOfStudy", "Courses", "AdCourses", "Average", "Comments",
-                            "Suspended", "Remark"]
+                            "Suspended", "Remark", "Degree"]
                       counter = 0
                       fndcount = []
 
@@ -628,9 +628,10 @@ class RequestHandler(BaseHTTPRequestHandler):
 
           check = myc.fetchall()
 
-          ob = ["id", "Email", "Password", "Adm", "FullName", "DateOfBirth", "Picture", "SchoolStartYear",
+          ob = ["id", "Email", "Password", "Adm", "FullName", "DateOfBirth", "Picture",
+                "SchoolStartYear",
                 "MajorFieldOfStudy", "MinorFieldOfStudy", "Courses", "AdCourses", "Average", "Comments",
-                "Suspended", "Remark"]
+                "Suspended", "Remark", "Degree"]
           counter = 0
           fndcount = []
 
