@@ -440,7 +440,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                       print('Admin stats true')
                       myc.execute(
                           'UPDATE users SET Email = %s ,FullName = %s ,DateOfBirth = %s ,MajorFieldOfStudy = %s ,MinorFieldOfStudy = %s,Courses=%s ,AdCourses = %s, Degree = %s WHERE id = %s ',
-                          (a, d, e, h, i, o, j, p tid))
+                          (a, d, e, h, i, o, j, p, tid))
                       mydb.commit()
                   else:
                       print("Admin stats false")
