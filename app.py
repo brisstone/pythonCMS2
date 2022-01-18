@@ -35,14 +35,15 @@ HOST = os.getenv("HOST")
 USERS = os.getenv("USERS")
 PASSWORD = os.getenv("PASSWORD")
 DATABASE = os.getenv("DATABASE")
+# HOST='sql4.freemysqlhosting.net'
 print(PASSWORD)
 
 mydb = mysql.connector.connect(host=HOST,user= USERS,password=PASSWORD,database=DATABASE)
 
 engine = create_engine("mysql+pymysql://"+USERS+":"+PASSWORD+"@" + HOST + "/" + DATABASE)
 
-# mydb = mysql.connector.connect(host='localhost',user='brisstone',password='password',database='cmsapp')
-# engine = create_engine("mysql+pymysql://brisstone:password@localhost/cmsapp"
+# mydb = mysql.connector.connect(host='sql4.freemysqlhosting.net',user='sq14466461',password='BIVmKhmJCu',database='sq14466461')
+# engine = create_engine("mysql+pymysql://sq14466461:password@sql4.freemysqlhosting.net/sq14466461")
 
 engine.connect()
 
@@ -413,7 +414,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
           if "admemail" in y:
               admcheck = y["admemail"]
-              a = y["email"]
+              a = y["Email"]
               d = y["FullName"]
               e = y["DateOfBirth"]
               # f = y["Picture"]
@@ -442,6 +443,15 @@ class RequestHandler(BaseHTTPRequestHandler):
                           'UPDATE users SET Email = %s ,FullName = %s ,DateOfBirth = %s ,MajorFieldOfStudy = %s ,MinorFieldOfStudy = %s,Courses=%s ,AdCourses = %s, Degree = %s WHERE id = %s ',
                           (a, d, e, h, i, o, j, p, tid))
                       mydb.commit()
+                      response = {}
+                      response["status"] = "done"
+
+                      res4 = {}
+                      res4["Success"] = "done"
+
+                      el2 = [res4]
+                      self.wfile.write(bytes(dumps(el2), "utf8"))
+
                   else:
                       print("Admin stats false")
 
@@ -463,12 +473,21 @@ class RequestHandler(BaseHTTPRequestHandler):
           # convert from json
           y = json.loads(data)
 
-          if "adcourses" in y:
+          if "AdCourses" in y:
               courses = ','.join(y["AdCourses"])
-              a = y["email"]
+              print(courses, 'djjdjddjkj')
+              a = y["Email"]
 
           myc.execute('UPDATE users SET AdCourses = %s WHERE Email = %s ', (courses, a))
           mydb.commit()
+          response = {}
+          response["status"] = "done"
+
+          res4 = {}
+          res4["Success"] = "done"
+
+          el2 = [res4]
+          self.wfile.write(bytes(dumps(el2), "utf8"))
 
       # SUSPENDING THE STUDENT REQUIRES THE ADMIN Email AS(admemail) THEN THE STUDENT EMAIL AND A STRING OF "1" OR "0" FOR THE BOOLIAN STATUS
       if self.path.endswith('/suspendstudent'):
