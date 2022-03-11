@@ -75,7 +75,7 @@ print(engine)
 Session=sessionmaker()
 myc = mydb.cursor(buffered=True)
 #DO NOT RUN THIS LINE AGAIN THE DATABASE HAS BEEN CREATED EXCEPT YOU WANT TO CREATE ONE ON A NEW SERVER
-# myc.execute('CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, Email VARCHAR(66) UNIQUE, Password VARCHAR(20), Adm INT(1) DEFAULT 0, FullName VARCHAR(200), DateOfBirth VARCHAR(20), Picture VARCHAR(10), SchoolStartYear VARCHAR(50), MajorFieldOfStudy VARCHAR(100),MinorFieldOfStudy VARCHAR(100), Courses TEXT, AdCourses TEXT, Average FLOAT(8) , Comments TEXT, Suspended INT(1) DEFAULT 0, Remark TEXT, Degree VARCHAR(100))')
+# myc.execute('CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, Email VARCHAR(66) UNIQUE, Password VARCHAR(20), Adm INT(1) DEFAULT 0, FullName VARCHAR(200), DateOfBirth VARCHAR(20), Picture TEXT(), SchoolStartYear VARCHAR(50), MajorFieldOfStudy VARCHAR(100),MinorFieldOfStudy VARCHAR(100), Courses TEXT, AdCourses TEXT, Average FLOAT(8) , Comments TEXT, Suspended INT(1) DEFAULT 0, Remark TEXT, Degree VARCHAR(100))')
 
 
 """ The HTTP request handler """
@@ -260,6 +260,8 @@ class RequestHandler(BaseHTTPRequestHandler):
 
               w = z["myFile"]
               f = w.split(',')[1]
+              print(w, 'kkdkkd')
+
 
               # print('yoooou',f.get("myFile"))
               # f = Image.open(BytesIO(b64decode(w.split(',')[1])))
@@ -276,7 +278,7 @@ class RequestHandler(BaseHTTPRequestHandler):
               n = ','.join(y["Courses"])
               o = y['Degree']
               ss = y['Suspended']
-              print(a)
+              print(w, 'kkkkki')
               # print(b)
               print(j)
 
@@ -393,6 +395,58 @@ class RequestHandler(BaseHTTPRequestHandler):
                   response = {}
                   response["userinfo"] = eval(f"{fndcount}")
           self.wfile.write(bytes(dumps(response), "utf8"))
+      if self.path.endswith('/admmajorsearch'):
+          self.send_response(200)
+          self._send_cors_headers()
+          self.send_header("Content-Type", "application/json")
+          self.end_headers()
+
+          dataLength = int(self.headers["Content-Length"])
+          data = self.rfile.read(dataLength)
+
+          data.strip()
+
+          # print(data)
+          # convert from json
+          y = json.loads(data)
+
+          ob = ["id", "Email", "Password", "Adm", "FullName", "DateOfBirth", "Picture", "SchoolStartYear",
+                "MajorFieldOfStudy", "MinorFieldOfStudy", "Courses", "AdCourses", "Average", "Comments",
+                "Suspended", "Remark", "Degree"]
+          counter = 0
+          fndcount = []
+
+          if "search" in y:
+              a = y["search"]
+
+              t = str(a)
+
+              query = "SELECT * FROM users WHERE MinorFieldOfStudy LIKE %s"
+              name = ("%" + t + "%",)
+              # name = ("%W%",)
+              # print(name, 'kdkdll')
+              myc.execute(query, name)
+
+              check = myc.fetchall()
+
+              for res in check:
+
+                  # print(res)
+                  sndcount = []
+                  obj = {}
+                  for pl in res:
+                      obj[ob[counter]] = pl
+
+                      counter = counter + 1
+
+                  # sndcount.append({ob[counter]:pl})
+
+                  fndcount.append(obj)
+                  counter = 0
+
+                  response = {}
+                  response["userinfo"] = eval(f"{fndcount}")
+          self.wfile.write(bytes(dumps(response), "utf8"))
 
       # UPDATING THE STUDENT PROFILE REQUIRES THE Email OF THE ADMIN THATS UPDATING THE STATUS AS(admemail) THEN ALL THE STUDENT INFO
       # THE COURSES AND ADDITIONAL COURSES SHOULD BE IN ARRAY FORMAT
@@ -417,14 +471,19 @@ class RequestHandler(BaseHTTPRequestHandler):
               a = y["Email"]
               d = y["FullName"]
               e = y["DateOfBirth"]
-              # f = y["Picture"]
-              # g = y["SchoolStartYear"]
+              fa = y["Picture"]
+              w = fa["myFile"]
+              f = w.split(',')[1]
+
+
+
+              g = y["SchoolStartYear"]
               h = y["MajorFieldOfStudy"]
               i = y["MinorFieldOfStudy"]
               j = ','.join(y["AdCourses"])
               # k = y["Average"]
-              # l = y["Comments"]
-              # m = y["Remark"]
+              l = y["Comments"]
+              m = y["Remark"]
               n = y["id"]
               o = ','.join(y["Courses"])
               p = y["Degree"]
@@ -440,8 +499,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                   if rr == 1:
                       print('Admin stats true')
                       myc.execute(
-                          'UPDATE users SET Email = %s ,FullName = %s ,DateOfBirth = %s ,MajorFieldOfStudy = %s ,MinorFieldOfStudy = %s,Courses=%s ,AdCourses = %s, Degree = %s WHERE id = %s ',
-                          (a, d, e, h, i, o, j, p, tid))
+                          'UPDATE users SET Email = %s ,FullName = %s ,DateOfBirth = %s ,Picture = %s, SchoolStartYear = %s, MajorFieldOfStudy = %s ,MinorFieldOfStudy = %s,Courses=%s ,AdCourses = %s,Comments = %s,Remark = %s,Degree = %s WHERE id = %s ',
+                          (a, d, e, f, g, h, i, o, j, l, m, p, tid))
                       mydb.commit()
                       response = {}
                       response["status"] = "done"
