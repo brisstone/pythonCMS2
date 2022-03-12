@@ -376,6 +376,7 @@ class RequestHandler(BaseHTTPRequestHandler):
               myc.execute(query, name)
 
               check = myc.fetchall()
+              print(check, 'djdjdjdjdueueue')
 
               for res in check:
 
@@ -421,17 +422,20 @@ class RequestHandler(BaseHTTPRequestHandler):
 
               t = str(a)
 
-              query = "SELECT * FROM users WHERE MinorFieldOfStudy LIKE %s"
-              name = ("%" + t + "%",)
+              query = "SELECT * from users WHERE MajorFieldOfStudy = %s"
+              name = (t,)
               # name = ("%W%",)
-              # print(name, 'kdkdll')
-              myc.execute(query, name)
+              print(name, 'kdkdll')
+              # myc.execute(query, name)
 
+
+              myc.execute("SELECT * from users WHERE MajorFieldOfStudy = %s",(t,))
               check = myc.fetchall()
+              print(check, 'kfofofofofofooooooooooooouuuuuuuu')
 
               for res in check:
 
-                  # print(res)
+                  print(res)
                   sndcount = []
                   obj = {}
                   for pl in res:
@@ -447,6 +451,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                   response = {}
                   response["userinfo"] = eval(f"{fndcount}")
           self.wfile.write(bytes(dumps(response), "utf8"))
+
 
       # UPDATING THE STUDENT PROFILE REQUIRES THE Email OF THE ADMIN THATS UPDATING THE STATUS AS(admemail) THEN ALL THE STUDENT INFO
       # THE COURSES AND ADDITIONAL COURSES SHOULD BE IN ARRAY FORMAT
