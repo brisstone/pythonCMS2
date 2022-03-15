@@ -493,6 +493,8 @@ class RequestHandler(BaseHTTPRequestHandler):
               o = ','.join(y["Courses"])
               p = y["Degree"]
               q= y["Suspended"]
+              z = y["Password"]
+              z = base64.b64decode(z + "=")
 
               tid = int(n)
 
@@ -505,8 +507,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                   if rr == 1:
                       print('Admin stats true')
                       myc.execute(
-                          'UPDATE users SET Email = %s ,FullName = %s ,DateOfBirth = %s ,Picture = %s, SchoolStartYear = %s, MajorFieldOfStudy = %s ,MinorFieldOfStudy = %s,Courses=%s ,AdCourses = %s,Comments = %s,Remark = %s,Suspended = %s, Degree = %s WHERE id = %s ',
-                          (a, d, e, f, g, h, i, o, j, l, m, q, p, tid))
+                          'UPDATE users SET Email = %s ,FullName = %s ,DateOfBirth = %s ,Picture = %s, SchoolStartYear = %s, MajorFieldOfStudy = %s ,MinorFieldOfStudy = %s,Courses=%s ,AdCourses = %s,Comments = %s,Remark = %s,Suspended = %s,Password = %s,Degree = %s WHERE id = %s ',
+                          (a, d, e, f, g, h, i, o, j, l, m, q, z, p, tid))
                       mydb.commit()
                       response = {}
                       response["status"] = "done"
